@@ -16,29 +16,29 @@
         creates="~/.ssh/yc-user.pub"
 
 
-    - name: Check if VM already created
-      shell: > 
-        yc compute instance get --name yc-instance-1 --format json
-      register: get_instance_result.stdout
+#    - name: Check if VM already created
+#      shell: > 
+#        yc compute instance get --name yc-instance-1 --format json
+#      register: get_instance_result.stdout
 
 
 
-    - name: Display result
-      debug:
-        msg: "{{ get_instance_result }}"
+#   - name: Display result
+#      debug:
+#        msg: "{{ get_instance_result }}"
       
 
-    - name: Display result
-      debug:
-        msg: "{{ get_instance_result | from_json }}"
+#    - name: Display result
+#      debug:
+#        msg: "{{ get_instance_result | from_json }}"
       
        
-    - set_fact:
-        iscreated: "{{ get_instance_result.stdout_lines.name == {instance_name}   }}"
+#    - set_fact:
+#        iscreated: "{{ get_instance_result.stdout_lines.name == {instance_name}   }}"
 
-    - name: Display result
-      debug:
-        msg: "{{ iscreated }}"
+#    - name: Display result
+#      debug:
+#        msg: "{{ iscreated }}"
       
     - name: Create VM
       shell: > 

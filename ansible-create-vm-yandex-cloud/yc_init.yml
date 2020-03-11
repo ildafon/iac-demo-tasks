@@ -1,0 +1,14 @@
+---
+- name: Exchange Keys between servers
+  become: yes
+  hosts: localhost
+  tasks:
+    - name: Install yc_cli
+      shell: > 
+        curl https://storage.yandexcloud.net/yandexcloud-yc/install.sh | bash
+        creates="~/yandex-cloud/bin/yc"
+
+
+    - name: 
+      shell: 'source "~/.bashrc"'
+      

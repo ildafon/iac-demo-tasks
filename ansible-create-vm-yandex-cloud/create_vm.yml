@@ -1,0 +1,63 @@
+---
+- name: Create VM on yandex cloud
+  hosts: 127.0.0.1
+  connection: local
+  gather_facts: false
+  vars:
+    instance_name: yc-instance-1
+    instance_memory_GB: 2
+    instance_cores: 2
+    instance_os: centos-7
+
+  tasks:
+    - name: Genetate key pair for yc-user
+      shell: > 
+        ssh-keygen -t rsa -f ~/.ssh/yc-user -C yc-user -P "" 
+        creates="~/.ssh/yc-user.pub"
+
+
+    - name: Check if VM already created
+      shell: > 
+        yc compute instance get --name yc-instance-1 --format json
+      register: get_instance_result.stdout
+
+
+
+    - name: Display result
+      debug:
+        msg: "{{ get_instance_result }}"
+      
+
+    - name: Display result
+      debug:
+        msg: "{{ get_instance_result | from_json }}"
+      
+       
+    - set_fact:
+        iscreated: "{{ get_instance_result.stdout_lines.name == {instance_name}   }}"
+
+    - name: Display result
+      debug:
+        msg: "{{ iscreated }}"
+      
+    - name: Create VM
+      shell: > 
+        yc compute instance create \
+        --name {{ instance_name }} \
+        --network-interface subnet-name=default-ru-central1-c,nat-ip-version=ipv4 \
+        --ssh-key ~/.ssh/yc-user.pub \
+        --memory {{ instance_memory_GB }} \
+        --cores {{ instance_cores }}  \
+        --create-boot-disk image-folder-id=standard-images,image-family={{instance_os}}
+        
+      register: VM_creation_report
+
+
+
+    - name: Display result
+      debug:
+        msg: "{{ VM_creation_report }}"
+    
+
+
+
